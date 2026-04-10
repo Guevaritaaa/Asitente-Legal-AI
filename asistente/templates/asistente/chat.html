@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal-AI Compliance</title>
+    <style>
+        :root {
+            --bg-color: #1e1e2f;
+            --chat-bg: #2a2a40;
+            --user-msg: #4CAF50;
+            --ai-msg: #3a3a5a;
+            --text-color: #ffffff;
+            --text-muted: #a0a0b0;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--chat-bg);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        .header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #3a3a5a;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #ffca28;
+        }
+
+        .header p {
+            margin: 5px 0 0 0;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .chat-box {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: var(--border-radius);
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .user-message {
+            background-color: var(--user-msg);
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
+        }
+
+        .ai-message {
+            background-color: var(--ai-msg);
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+        }
+
+        .input-area {
+            padding: 15px;
+            border-top: 1px solid #3a3a5a;
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: var(--border-radius);
+            background-color: #1e1e2f;
+            color: white;
+            font-size: 1rem;
+        }
+
+        input[type="text"]:focus {
+            outline: 2px solid #ffca28;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: var(--border-radius);
+            background-color: #ffca28;
+            color: #1e1e2f;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #ffb300;
+        }
+
+        /* Estilos para el panel desplegable de fuentes */
+        details {
+            margin-top: 10px;
+            background-color: #1e1e2f;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #4a4a6a;
+            font-size: 0.85rem;
+        }
+
+        summary {
+            cursor: pointer;
+            color: #ffca28;
+            font-weight: bold;
+        }
+
+        .fuente-item {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed #4a4a6a;
+            color: var(--text-muted);
+        }
+
+        .loading {
+            align-self: flex-start;
+            color: var(--text-muted);
+            font-style: italic;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1> Asistente Legal </h1>
+        <p>Procesamiento 100% local (Llama 3.1) • Ley Federal de Protección de Datos Personales</p>
+    </div>
+
+    <div class="chat-box" id="chat-box">
+        <div class="message ai-message">
+            ¡Hola! Soy tu asesor legal corporativo. ¿En qué puedo ayudarte con relacion a la Ley Federal de Protección de Datos Personales?
+        </div>
+    </div>
+    
+    <div class="loading" id="loading-indicator">Analizando tu pregunta... por favor espera.</div>
+
+    <form class="input-area" id="chat-form">
+        {% csrf_token %}
+        <input type="text" id="pregunta-input" placeholder="Ej: ¿Qué son los derechos ARCO?" required autocomplete="off">
+        <button type="submit">Enviar</button>
+    </form>
+</div>
+
+<script>
+    const chatForm = document.getElementById('chat-form');
+    const chatBox = document.getElementById('chat-box');
+    const preguntaInput = document.getElementById('pregunta-input');
+    const loadingIndicator = document.getElementById('loading-indicator');
+
+    chatForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const pregunta = preguntaInput.value.trim();
+        if (!pregunta) return;
+
+        agregarMensaje(pregunta, 'user-message');
+        preguntaInput.value = '';
+        
+        loadingIndicator.style.display = 'block';
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        try {
+            const response = await fetch('', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': csrfToken
+                },
+                body: new URLSearchParams({
+                    'pregunta': pregunta
+                })
+            });
+
+            const data = await response.json();
+
+            loadingIndicator.style.display = 'none';
+            agregarMensajeIA(data.respuesta, data.fuentes);
+
+        } catch (error) {
+            loadingIndicator.style.display = 'none';
+            agregarMensaje('Hubo un error de conexión con el servidor local.', 'ai-message');
+        }
+    });
+
+    function agregarMensaje(texto, clase) {
+        const div = document.createElement('div');
+        div.className = `message ${clase}`;
+        div.textContent = texto;
+        chatBox.appendChild(div);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function agregarMensajeIA(texto, fuentes) {
+        const div = document.createElement('div');
+        div.className = 'message ai-message';
+        
+        let htmlContent = `<div class="ai-text">${texto.replace(/\n/g, '<br>')}</div>`;
+        
+        if (fuentes && fuentes.length > 0) {
+            let fuentesHtml = `
+            <details>
+                <summary>📄 Ver artículos y fragmentos citados</summary>
+                <div class="fuentes-content">`;
+            
+            fuentes.forEach(fuente => {
+                fuentesHtml += `<div class="fuente-item">${fuente}</div>`;
+            });
+            
+            fuentesHtml += `</div></details>`;
+            htmlContent += fuentesHtml;
+        }
+
+        div.innerHTML = htmlContent;
+        chatBox.appendChild(div);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+</script>
+
+</body>
+</html>
