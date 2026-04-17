@@ -2,8 +2,8 @@ from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings
 from llama_index.llms.ollama import Ollama
 from llama_index.embeddings.ollama import OllamaEmbedding
 from llama_index.readers.file import PyMuPDFReader
+from llama_index.core.node_parser import SemanticSplitterNodeParser
 import os
-
 
 class AsistenteLegal:
     def __init__(self):
@@ -24,9 +24,17 @@ class AsistenteLegal:
                 "IMPORTANTE: NUNCA comiences tu respuesta con la palabra 'Rewrite' ni 'Repeat'."
             )
         )
-        Settings.embed_model = OllamaEmbedding(model_name="nomic-embed-text")
-        Settings.chunk_size = 512
-        Settings.chunk_overlap = 50
+        
+        # Inicializar Modelo Embendings
+        modelo_embeddings = OllamaEmbedding(model_name="nomic-embed-text")
+        Settings.embed_model = modelo_embeddings
+
+        # Configurar el Separador Semántico
+        separador_semantico = SemanticSplitterNodeParser(
+            buffer_size=1, 
+            breakpoint_percentile_threshold=95, 
+            embed_model=modelo_embeddings
+        )
 
         ruta_datos = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'datos')
         
@@ -34,16 +42,18 @@ class AsistenteLegal:
         extractor_pdf = {".pdf": PyMuPDFReader()}
         documentos = SimpleDirectoryReader(ruta_datos, file_extractor=extractor_pdf).load_data()
 
-        print("Indexando y vectorizando...")
-        self.indice = VectorStoreIndex.from_documents(documentos)
+        print("Procesando cortes semánticos... (Esto tomará un poco más de tiempo la primera vez)")
+        
+        nodos = separador_semantico.get_nodes_from_documents(documentos)
+
+        print("Vectorizando los nuevos chunks...")
+        self.indice = VectorStoreIndex(nodos)
         self.motor_preguntas = self.indice.as_query_engine(similarity_top_k=5)
 
     def consultar(self, pregunta):
         respuesta = self.motor_preguntas.query(pregunta)
         
-        # Limpiamos los "pensamientos" de nuestro modelo para que no se incluyaan en la respuesta final
         texto_limpio = str(respuesta).replace("**Rewrite**", "").replace("**Repeat**", "").strip()
-        
         fuentes = [n.text for n in respuesta.source_nodes]
         
         return {
@@ -51,5 +61,4 @@ class AsistenteLegal:
             "fuentes": fuentes
         }
 
-# Instancia global para evitar volver a cargar el modelo y los datos cada vez que se haga una pregunta
 motor = AsistenteLegal()

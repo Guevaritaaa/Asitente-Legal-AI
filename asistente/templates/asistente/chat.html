@@ -117,7 +117,6 @@
             background-color: #ffb300;
         }
 
-        /* Estilos para el panel desplegable de fuentes */
         details {
             margin-top: 10px;
             background-color: #1e1e2f;
@@ -145,6 +144,7 @@
             color: var(--text-muted);
             font-style: italic;
             display: none;
+            padding: 0 20px;
         }
     </style>
 </head>
@@ -152,17 +152,17 @@
 
 <div class="container">
     <div class="header">
-        <h1> Asistente Legal </h1>
-        <p>Procesamiento 100% local (Llama 3.1) • Ley Federal de Protección de Datos Personales</p>
+        <h1>⚖️ Legal-AI Compliance Assistant</h1>
+        <p>Procesamiento 100% local (Llama 3.1) • Ley Federal de Datos Personales</p>
     </div>
 
     <div class="chat-box" id="chat-box">
         <div class="message ai-message">
-            ¡Hola! Soy tu asesor legal corporativo. ¿En qué puedo ayudarte con relacion a la Ley Federal de Protección de Datos Personales?
+            ¡Hola! Soy tu asesor legal corporativo. ¿En qué puedo ayudarte a entender la Ley Federal de Protección de Datos Personales hoy?
         </div>
     </div>
     
-    <div class="loading" id="loading-indicator">Analizando tu pregunta... por favor espera.</div>
+    <div class="loading" id="loading-indicator">Analizando marco legal... por favor espera.</div>
 
     <form class="input-area" id="chat-form">
         {% csrf_token %}
@@ -178,7 +178,7 @@
     const loadingIndicator = document.getElementById('loading-indicator');
 
     chatForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
+        e.preventDefault(); 
 
         const pregunta = preguntaInput.value.trim();
         if (!pregunta) return;
