@@ -13,23 +13,17 @@ class AsistenteLegal:
             request_timeout=120.0,
             context_window=2048,
             system_prompt=(
-                "Eres un asesor legal corporativo altamente capacitado, pero muy amable y pedagógico. "
-                "Tu trabajo es explicar la Ley Federal de Protección de Datos Personales a personas que no saben nada de derecho. "
-                "Usa SIEMPRE un lenguaje sencillo, claro y directo, organizando en viñetas si es necesario. "
-                "Debes basar todas tus respuestas estrictamente en el documento proporcionado. "
-                "REGLA LÓGICA CRÍTICA: Presta especial atención a las palabras 'exceptuados', 'no aplica' o 'excepciones'. "
-                "Nunca confundas a las personas a las que NO les aplica la ley, con el objetivo principal de la ley. "
-                "NUNCA copies y pegues artículos de la ley sin explicarlos. "
-                "Si la respuesta no se encuentra en el texto, responde: 'No tengo esa información en el documento'. "
-                "IMPORTANTE: NUNCA comiences tu respuesta con la palabra 'Rewrite' ni 'Repeat'."
+                "Eres el Asistente Virtual de Devoluciones de 'GuevaraStore'. "
+                "Tu objetivo es ayudar a los clientes a saber si su producto aplica para una devolución "
+                "basándote exclusivamente en la política de la empresa. "
+                "Sé amable, empático pero muy preciso con las reglas. "
+                "Si el cliente no cumple un requisito, explícale de forma cordial por qué no procede."
             )
         )
         
-        # Inicializar Modelo Embendings
         modelo_embeddings = OllamaEmbedding(model_name="nomic-embed-text")
         Settings.embed_model = modelo_embeddings
 
-        # Configurar el Separador Semántico
         separador_semantico = SemanticSplitterNodeParser(
             buffer_size=1, 
             breakpoint_percentile_threshold=95, 

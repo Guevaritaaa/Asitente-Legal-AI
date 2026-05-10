@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Legal-AI Compliance</title>
+    <title>Asistente de devoluciones GuevaraStore</title>
     <style>
         :root {
             --bg-color: #1e1e2f;
@@ -152,21 +152,20 @@
 
 <div class="container">
     <div class="header">
-        <h1>⚖️ Legal-AI Compliance Assistant</h1>
-        <p>Procesamiento 100% local (Llama 3.1) • Ley Federal de Datos Personales</p>
+        <h1>⚖️ Asistente de devoluciones GuevaraStore</h1>
+        <p>Procesamiento 100% local (Llama 3.1) • Política de devoluciones</p>
     </div>
 
     <div class="chat-box" id="chat-box">
         <div class="message ai-message">
-            ¡Hola! Soy tu asesor legal corporativo. ¿En qué puedo ayudarte a entender la Ley Federal de Protección de Datos Personales hoy?
-        </div>
+            ¡Hola! Cuéntame qué sucedió con tu compra para ver cómo puedo ayudarte con tu devolución        </div>
     </div>
     
-    <div class="loading" id="loading-indicator">Analizando marco legal... por favor espera.</div>
+    <div class="loading" id="loading-indicator">Analizando tu consulta...</div>
 
     <form class="input-area" id="chat-form">
         {% csrf_token %}
-        <input type="text" id="pregunta-input" placeholder="Ej: ¿Qué son los derechos ARCO?" required autocomplete="off">
+        <input type="text" id="pregunta-input" placeholder="Ej: Mi producto está dañado" required autocomplete="off">
         <button type="submit">Enviar</button>
     </form>
 </div>
