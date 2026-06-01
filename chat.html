@@ -164,7 +164,6 @@
     <div class="loading" id="loading-indicator">Analizando tu consulta...</div>
 
     <form class="input-area" id="chat-form">
-        {% csrf_token %}
         <input type="text" id="pregunta-input" placeholder="Ej: Mi producto está dañado" required autocomplete="off">
         <button type="submit">Enviar</button>
     </form>
@@ -179,6 +178,7 @@
     chatForm.addEventListener('submit', async function(e) {
         e.preventDefault(); 
 
+        // Bórralo todo y usa este bloque limpio:
         const pregunta = preguntaInput.value.trim();
         if (!pregunta) return;
 
@@ -188,14 +188,11 @@
         loadingIndicator.style.display = 'block';
         chatBox.scrollTop = chatBox.scrollHeight;
 
-        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
         try {
-            const response = await fetch('', {
+            const response = await fetch('/api/chat', { 
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': csrfToken
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 },
                 body: new URLSearchParams({
                     'pregunta': pregunta
