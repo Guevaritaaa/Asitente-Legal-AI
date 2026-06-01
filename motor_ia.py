@@ -1,17 +1,20 @@
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings
-from llama_index.llms.ollama import Ollama
-from llama_index.embeddings.ollama import OllamaEmbedding
+from llama_index.llms.gemini import Gemini
+from llama_index.embeddings.gemini import GeminiEmbedding
 from llama_index.readers.file import PyMuPDFReader
 from llama_index.core.node_parser import SemanticSplitterNodeParser
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class AsistenteDevoluciones:
     def __init__(self):
-        print("Configurando modelos locales...")
-        Settings.llm = Ollama(
-            model="llama3.1",
-            request_timeout=120.0,
-            context_window=2048,
+        print("Conectando con Google Gemini API...")
+        
+        Settings.llm = Gemini(
+            model="models/gemini-3.5-flash", # <--- ¡El modelo exacto de tu lista!
+            api_key=os.environ.get("GOOGLE_API_KEY"),
             system_prompt=(
                 "Eres el Asistente Virtual de Devoluciones de 'GuevaraStore'. "
                 "Tu único objetivo es evaluar si el producto aplica para una devolución basándote EXCLUSIVAMENTE en la política proporcionada. "
@@ -21,13 +24,13 @@ class AsistenteDevoluciones:
                 "ESTRUCTURA DE TU RESPUESTA: "
                 "Escribe de forma natural, empática y conversacional (máximo 2 párrafos). NO uses listas. "
                 "PROHIBICIONES ESTRICTAS (GUARDRAILS): "
-                "- NUNCA rompas tu personaje. NUNCA agregues notas aclaratorias al final como '(Esta respuesta se ajusta a...)' o '(Basado en el texto...)'. "
+                "- NUNCA rompas tu personaje. NUNCA agregues notas aclaratorias al final como '(Esta respuesta se ajusta a...)'. "
                 "- NUNCA pienses en voz alta ni expliques tus reglas internas al usuario. "
                 "- Si piden código, matemáticas o tareas ajenas a la tienda, responde SOLO: 'Lo siento, soy un asistente exclusivo para la gestión de devoluciones en GuevaraStore y no puedo ayudarte con ese tema.'"
             )
         )
         
-        modelo_embeddings = OllamaEmbedding(model_name="nomic-embed-text")
+        modelo_embeddings = GeminiEmbedding(model_name="models/gemini-embedding-2")
         Settings.embed_model = modelo_embeddings
 
         separador_semantico = SemanticSplitterNodeParser(
