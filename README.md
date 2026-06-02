@@ -5,7 +5,7 @@ Un backend inteligente construido con **FastAPI** y una arquitectura **RAG Multi
 ## Arquitectura Técnica
 * **Framework:** FastAPI (Python)
 * **Orquestador AI:** LlamaIndex
-* **Cerebro Generativo (LLM):** Google Gemini 3.5 Flash
+* **Cerebro Generativo (LLM):** Groq (Llama-3.3-70B)
 * **Motor de Embeddings:** Voyage AI (voyage-4)
 * **Procesamiento de Documentos:** Chunking Semántico (PyMuPDF)
 
@@ -15,7 +15,7 @@ Un backend inteligente construido con **FastAPI** y una arquitectura **RAG Multi
 * **Chunking Semántico:** División inteligente del documento de políticas evaluando el cambio de contexto real de las oraciones, no solo el conteo de palabras.
 
 ## Despliegue
-Este proyecto está configurado para ser desplegado en servicios cloud como Render o Railway mediante la inyección segura de variables de entorno (`GOOGLE_API_KEY`, `VOYAGE_API_KEY`).
+Este proyecto está configurado para ser desplegado en servicios cloud como Render o Railway mediante la inyección segura de variables de entorno (`GROQ_API_KEY`, `VOYAGE_API_KEY`).
 
 ## Roadmap (Próximas Mejoras)
 - [ ] **Persistencia Vectorial (PostgreSQL + pgvector):** Migración de los embeddings a una base de datos para evitar la re-indexación en cada arranque del servidor, reduciendo a cero el consumo redundante de la API de Voyage AI.

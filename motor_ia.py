@@ -59,8 +59,6 @@ class AsistenteDevoluciones:
         )
         
         qa_template = PromptTemplate(plantilla_estricta)
-
-        print("Vectorizando nuevos chunks...")
         
         self.motor_preguntas = self.indice.as_query_engine(
             similarity_top_k=3,
