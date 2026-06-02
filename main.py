@@ -1,5 +1,6 @@
-from fastapi import FastAPI, Form
+from fastapi import FastAPI, Form, HTTPException
 from fastapi.responses import FileResponse
+from google.api_core.exceptions import ResourceExhausted
 from motor_ia import motor
 
 app = FastAPI()
@@ -10,5 +11,17 @@ def pagina_principal():
 
 @app.post("/api/chat")
 async def responderChat(pregunta: str = Form(...)):
-    respuesta_ia = motor.consultar(pregunta)
-    return respuesta_ia
+    try:
+        respuesta_ia = motor.consultar(pregunta)
+        return respuesta_ia
+        
+    except ResourceExhausted:
+        raise HTTPException(
+            status_code=429, 
+            detail="El Asistente está procesando demasiadas solicitudes en este momento. Por favor, espera unos segundos e intenta de nuevo."
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, 
+            detail=f"Ocurrió un error interno: {str(e)}"
+        )
