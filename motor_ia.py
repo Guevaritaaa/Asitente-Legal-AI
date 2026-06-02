@@ -1,5 +1,5 @@
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings
-from llama_index.llms.gemini import Gemini
+from llama_index.llms.groq import Groq
 from llama_index.embeddings.voyageai import VoyageEmbedding
 from llama_index.readers.file import PyMuPDFReader
 from llama_index.core.node_parser import SemanticSplitterNodeParser

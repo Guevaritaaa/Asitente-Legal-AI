@@ -153,7 +153,7 @@
 <div class="container">
     <div class="header">
         <h1>Asistente de devoluciones GuevaraStore</h1>
-        <p>Procesamiento 100% local (Llama 3.1) • Política de devoluciones</p>
+        <p>RAG Cloud: Llama 3.3 (Groq) + Voyage AI • Política de devoluciones</p>
     </div>
 
     <div class="chat-box" id="chat-box">
@@ -212,6 +212,7 @@
             loadingIndicator.style.display = 'none';
             agregarMensaje('Hubo un error de red. Revisa tu conexión a internet.', 'ai-message');
         }
+    });
 
     function agregarMensaje(texto, clase) {
         const div = document.createElement('div');
