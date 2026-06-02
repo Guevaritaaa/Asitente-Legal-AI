@@ -18,16 +18,15 @@ class AsistenteDevoluciones:
             api_key=os.environ.get("GROQ_API_KEY")
         )
         
-        modelo_embeddings = VoyageEmbedding(
+        Settings.embed_model = VoyageEmbedding(
             model_name="voyage-4",
             voyage_api_key=os.environ.get("VOYAGE_API_KEY")
         )
-        Settings.embed_model = modelo_embeddings
 
         separador_semantico = SemanticSplitterNodeParser(
             buffer_size=1, 
             breakpoint_percentile_threshold=95, 
-            embed_model=modelo_embeddings
+            embed_model=Settings.embed_model
         )
 
         ruta_datos = os.path.join((os.path.dirname(__file__)), 'datos')
