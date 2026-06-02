@@ -1,0 +1,8 @@
+fastapi[standard]
+python-dotenv
+llama-index-core
+llama-index-llms-gemini
+llama-index-embeddings-voyageai
+llama-index-readers-file
+pymupdf
+voyageai

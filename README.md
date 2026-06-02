@@ -1,34 +1,18 @@
-\#Asistente RAG de Devoluciones (GuevaraStore)
+# 🤖 Asistente de Devoluciones AI - GuevaraStore
 
+Un backend inteligente construido con **FastAPI** y una arquitectura **RAG Multi-Modelo**, diseñado para auditar y gestionar solicitudes de devolución en comercio electrónico basándose estrictamente en políticas corporativas(para fines practicos se hizo uso de una politica ficticia).
 
+## 🚀 Arquitectura Técnica
+* **Framework:** FastAPI (Python)
+* **Orquestador AI:** LlamaIndex
+* **Cerebro Generativo (LLM):** Google Gemini 3.5 Flash
+* **Motor de Embeddings:** Voyage AI (voyage-4)
+* **Procesamiento de Documentos:** Chunking Semántico (PyMuPDF)
 
-Este proyecto es un asistente virtual diseñado para automatizar la atención al cliente en procesos de devolución, utilizando una arquitectura RAG 100% local.
+## 🧠 Características Principales
+* **RAG Multi-Modelo:** Desacoplamiento de embeddings y generación para optimizar latencia y esquivar cuotas estrictas de API.
+* **Prompt Engineering Avanzado:** Implementación de *Guardrails* de alta prioridad para evitar alucinaciones, inyecciones de prompt (Prompt Injection) y garantizar el rechazo inmediato de artículos no retornables (ej. caducidad, higiene, liquidación).
+* **Chunking Semántico:** División inteligente del documento de políticas evaluando el cambio de contexto real de las oraciones, no solo el conteo de palabras.
 
-
-
-\*\*Actualización Reciente:\*\* El backend fue migrado de Django a microservicios con \*\*FastAPI\*\* para optimizar el ciclo de petición-respuesta y preparar la infraestructura para un futuro despliegue moderno.
-
-
-
-\## Stack Tecnológico
-
-\* \*\*Backend:\*\* FastAPI (Python), Uvicorn.
-
-\* \*\*Inteligencia Artificial:\*\* LlamaIndex, Ollama (Llama 3.1).
-
-\* \*\*Embeddings \& Procesamiento:\*\* nomic-embed-text, Semantic Chunking (PyMuPDF).
-
-\* \*\*Frontend:\*\* HTML5, CSS3, JavaScript.
-
-
-
-\##Arquitectura y Flujo de Datos
-
-1\. \*\*Ingesta de Documentos:\*\* El sistema lee la política de devoluciones corporativa en PDF.
-
-2\. \*\*Fragmentación Semántica:\*\* Se divide el texto inteligentemente para no perder contexto.
-
-3\. \*\*Vectorización:\*\* Los fragmentos se convierten en embeddings para realizar búsquedas por similitud matemática.
-
-4\. \*\*Guardrails (Prompt Engineering):\*\* Llama 3.1 evalúa la política, rechaza artículos no retornables (ej. ropa interior) y evita alucinaciones o desviaciones del tema.
-
+## 🛠️ Despliegue
+Este proyecto está configurado para ser desplegado en servicios cloud como Render o Railway mediante la inyección segura de variables de entorno (`GOOGLE_API_KEY`, `VOYAGE_API_KEY`).
