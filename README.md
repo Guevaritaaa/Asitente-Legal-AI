@@ -16,3 +16,8 @@ Un backend inteligente construido con **FastAPI** y una arquitectura **RAG Multi
 
 ## Despliegue
 Este proyecto está configurado para ser desplegado en servicios cloud como Render o Railway mediante la inyección segura de variables de entorno (`GOOGLE_API_KEY`, `VOYAGE_API_KEY`).
+
+## Roadmap (Próximas Mejoras)
+- [ ] **Persistencia Vectorial (PostgreSQL + pgvector):** Migración de los embeddings a una base de datos para evitar la re-indexación en cada arranque del servidor, reduciendo a cero el consumo redundante de la API de Voyage AI.
+- [ ] **Rediseño de UI/UX:** Mejoras visuales y de usabilidad en el frontend (`chat.html`) para ofrecer una experiencia más moderna y responsiva.
+- [ ] **Memoria de Conversación:** Implementación de historial de chat para que el LLM recuerde el contexto inmediato de la sesión actual.
