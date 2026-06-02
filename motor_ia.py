@@ -74,11 +74,12 @@ class AsistenteDevoluciones:
         qa_template = PromptTemplate(plantilla_estricta)
 
         print("Vectorizando nuevos chunks...")
+        
         self.motor_preguntas = self.indice.as_query_engine(
             similarity_top_k=5,
-            text_qa_template=qa_template
+            text_qa_template=qa_template,
+            response_mode="compact"
         )
-
     def consultar(self, pregunta):
         respuesta = self.motor_preguntas.query(pregunta)
         
