@@ -178,7 +178,6 @@
     chatForm.addEventListener('submit', async function(e) {
         e.preventDefault(); 
 
-        // Bórralo todo y usa este bloque limpio:
         const pregunta = preguntaInput.value.trim();
         if (!pregunta) return;
 
@@ -200,15 +199,19 @@
             });
 
             const data = await response.json();
-
             loadingIndicator.style.display = 'none';
-            agregarMensajeIA(data.respuesta, data.fuentes);
+
+            if (response.ok) {
+                agregarMensajeIA(data.respuesta, data.fuentes);
+            } else {
+
+                agregarMensaje(data.detail, 'ai-message');
+            }
 
         } catch (error) {
             loadingIndicator.style.display = 'none';
-            agregarMensaje('Hubo un error de conexión con el servidor local.', 'ai-message');
+            agregarMensaje('Hubo un error de red. Revisa tu conexión a internet.', 'ai-message');
         }
-    });
 
     function agregarMensaje(texto, clase) {
         const div = document.createElement('div');
