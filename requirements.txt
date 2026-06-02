@@ -6,3 +6,4 @@ llama-index-embeddings-voyageai
 llama-index-readers-file
 pymupdf
 voyageai
+tokenizers
