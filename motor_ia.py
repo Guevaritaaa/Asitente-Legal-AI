@@ -13,9 +13,9 @@ class AsistenteDevoluciones:
     def __init__(self):
         print("Iniciando RAG Multi-Modelo...")
         
-        Settings.llm = Gemini(
-            model="models/gemini-3.5-flash",
-            api_key=os.environ.get("GOOGLE_API_KEY"),
+        Settings.llm = Groq(
+            model="llama-3.3-70b-versatile",
+            api_key=os.environ.get("GROQ_API_KEY"),
             system_prompt=(
                 "Eres el Asistente Virtual de Devoluciones de 'GuevaraStore'. "
                 "Tu único objetivo es evaluar si el producto aplica para una devolución basándote EXCLUSIVAMENTE en la política proporcionada. "
