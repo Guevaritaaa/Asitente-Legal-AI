@@ -1,6 +1,8 @@
 # Asistente de Devoluciones AI - GuevaraStore
 
-Un backend inteligente construido con **FastAPI** y una arquitectura **RAG Multi-Modelo**, diseñado para auditar y gestionar solicitudes de devolución en comercio electrónico basándose estrictamente en políticas corporativas(para fines practicos se hizo uso de una politica ficticia).
+**Demo en Vivo:** [Prueba el Asistente Aquí](https://api-guevarastore.onrender.com)
+
+Un backend inteligente construido con **FastAPI** y una arquitectura **RAG Multi-Modelo**, diseñado para auditar y gestionar solicitudes de devolución en comercio electrónico basándose estrictamente en políticas corporativas (política ficticia para fines prácticos).
 
 ## Arquitectura Técnica
 * **Framework:** FastAPI (Python)
@@ -14,10 +16,26 @@ Un backend inteligente construido con **FastAPI** y una arquitectura **RAG Multi
 * **Prompt Engineering Avanzado:** Implementación de *Guardrails* de alta prioridad para evitar alucinaciones, inyecciones de prompt (Prompt Injection) y garantizar el rechazo inmediato de artículos no retornables (ej. caducidad, higiene, liquidación).
 * **Chunking Semántico:** División inteligente del documento de políticas evaluando el cambio de contexto real de las oraciones, no solo el conteo de palabras.
 
-## Despliegue
-Este proyecto está configurado para ser desplegado en servicios cloud como Render o Railway mediante la inyección segura de variables de entorno (`GROQ_API_KEY`, `VOYAGE_API_KEY`).
+## Cómo ejecutar en local
+Si deseas clonar y probar este proyecto en tu propia máquina:
 
-## Roadmap (Próximas Mejoras)
-- [ ] **Persistencia Vectorial (PostgreSQL + pgvector):** Migración de los embeddings a una base de datos para evitar la re-indexación en cada arranque del servidor, reduciendo a cero el consumo redundante de la API de Voyage AI.
-- [ ] **Rediseño de UI/UX:** Mejoras visuales y de usabilidad en el frontend (`chat.html`) para ofrecer una experiencia más moderna y responsiva.
-- [ ] **Memoria de Conversación:** Implementación de historial de chat para que el LLM recuerde el contexto inmediato de la sesión actual.
+1. Clona el repositorio e instala las dependencias:
+   ```bash
+   pip install -r requirements.txt
+   
+Crea un archivo .env basándote en el .env.example e inserta tus API Keys de Groq y Voyage AI.
+
+Inicia el servidor con este comando:
+
+En la Terminal escribe: 
+
+fastapi dev main.py
+
+Abre http://localhost:8000 en tu navegador.
+
+🚀 Roadmap (Próximas Mejoras)
+[ ] Persistencia Vectorial (PostgreSQL + pgvector): Migración de los embeddings a una base de datos para evitar la re-indexación en cada arranque del servidor, reduciendo a cero el consumo redundante de la API de Voyage AI.
+
+[ ] Testing Automatizado: Integración de pytest para validar automáticamente los guardrails y la lógica de rechazo de devoluciones.
+
+[ ] Memoria de Conversación: Implementación de historial de chat para que el LLM recuerde el contexto inmediato de la sesión actual.
